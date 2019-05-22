@@ -1,0 +1,83 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Gene`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Gene` (
+  `gene_name` VARCHAR(45) NOT NULL,
+  `chromosome` VARCHAR(10) NULL,
+  `gene_descr` TEXT(250) NULL,
+  PRIMARY KEY (`gene_name`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Syndrome`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Syndrome` (
+  `Pat_syndrome` VARCHAR(45) NOT NULL,
+  `Syndrome_descr` TEXT(250) NULL,
+  PRIMARY KEY (`Pat_syndrome`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Patient`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Patient` (
+  `Pat_name` VARCHAR(45) NOT NULL,
+  `Pat_syndrome` VARCHAR(45) NULL,
+  `Pat_sex` ENUM("M", "F") NULL,
+  PRIMARY KEY (`Pat_name`),
+  INDEX `fk_Patient_1_idx` (`Pat_syndrome` ASC) VISIBLE,
+  CONSTRAINT `fk_Patient_1`
+    FOREIGN KEY (`Pat_syndrome`)
+    REFERENCES `mydb`.`Syndrome` (`Pat_syndrome`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Hereditary diseases`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Hereditary diseases` (
+  `ID` INT NOT NULL,
+  `gene_name` VARCHAR(45) NULL,
+  `Start` INT(50) NULL,
+  `End` INT(50) NULL,
+  `Pat_name` VARCHAR(45) NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_Hereditary diseases_1_idx` (`gene_name` ASC) VISIBLE,
+  INDEX `fk_Hereditary diseases_2_idx` (`Pat_name` ASC) VISIBLE,
+  CONSTRAINT `fk_Hereditary diseases_1`
+    FOREIGN KEY (`gene_name`)
+    REFERENCES `mydb`.`Gene` (`gene_name`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Hereditary diseases_2`
+    FOREIGN KEY (`Pat_name`)
+    REFERENCES `mydb`.`Patient` (`Pat_name`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+

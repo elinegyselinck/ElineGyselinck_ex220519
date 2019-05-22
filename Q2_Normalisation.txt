@@ -1,0 +1,38 @@
+UNF:	All data stored in 1 table
+
+Personnel number:	Pers_ID
+Name:					Name
+Date of birth:		Birthdate
+Lab code:			Labcode
+Lab name:			Labname
+Research code:		RScode
+Research description:	RSdescr
+Research supervisor:		RSsup
+
+RSProjectsAndStaff(Pers_ID,Name,Birthdate,Labcode,Labname,RScode,RSdescr,RSsup)
+
+-------------------------------------------------------------------------------
+
+1NF:	All repeating and calculated groups is stored in individual tables
+		primary key of the table is identified between *
+
+RSProjectsAndStaff(*Pers_ID*,Name,Birthdate,Labcode,Labname)
+RSstaff(*Pers_ID,RScode*,RSdescr,RSsup)
+
+-------------------------------------------------------------------------------
+
+2NF:	Every non-prime attribute must be dependent on the entire candidate key
+
+RSProjectsAndStaff(*Pers_ID*,Name,Birthdate,Labcode,Labname)
+RSstaff(*Pers_ID*,RScode)
+RSProject(*RScode*,RSdescr,RSsup)
+
+-------------------------------------------------------------------------------
+
+3NF:	Every non-prime attribute can not be dependent on other non-prime attributes
+
+RSProjectsAndStaff(*Pers_ID*,Name,Birthdate,Labcode)
+RSLab(*Labcode*,Labname)
+RSstaff(*Pers_ID*,RScode)
+RSProject(*RScode*,RSdescr,RSsup)
+
